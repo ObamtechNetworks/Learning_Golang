@@ -5,7 +5,7 @@ import "fmt"
 
 // an entry point for the go program
 func main() {
-	var conferenceName = "Go Conference" // variable in Go
+	conferenceName := "Go Conference" // syntactic sugar, := assignment in Go. PS: Does not work for variable with explicit type set, and does not work for constants
 	const conferenceTickets int = 50  // constants in go
 	var remainingTickets uint = 50
 
