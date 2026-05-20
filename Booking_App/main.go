@@ -15,13 +15,25 @@ func main() {
 	fmt.Printf("Welcome to the %v booking application\n", conferenceName)
 	fmt.Printf("We have total of %v tickets and %v are still availalbe\n", conferenceTickets, remainingTickets)
 	fmt.Println("Get your tickets here to attend")
+	fmt.Printf("\n")
 
 
-	// ask user for their name
-	var userName string
+	var firstName string
+	var lastName string
+	var email string
 	var userTickets int
+	// ask user for their name
+	fmt.Println("Please Enter your first name: ")
+	fmt.Scan(&firstName) // scans user input and assigns to variable (uses the pointer operator & to store the address of the variable as received from the user)
 	
-	userName = "Tom"
-	userTickets = 2
-	fmt.Printf("User %v booked %v tickets.\n", userName, userTickets)
+	fmt.Println("Please Enter your last name: ")
+	fmt.Scan(&lastName)
+
+	fmt.Println("Please Enter your email address: ")
+	fmt.Scan(&email)
+
+	fmt.Println("Please Enter the number of tickets you wish to purchase: ")
+	fmt.Scan(&userTickets)
+
+	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 }
