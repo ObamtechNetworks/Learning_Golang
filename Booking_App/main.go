@@ -21,7 +21,25 @@ func main() {
 	// var bookings = [50]string{"Nana", "Nicole", "Peter"}  // we defined the length/size of the array to be 50 (can have only 50 elements), we also specify the allowed data types to be strings
 
 	// We can also declare an empty array with its type without assigning values yet
-	var bookings [50]string
+	// var bookings [50]string
+
+	// SLICES IN GO
+	/**
+	Slice is an abstraction of an Array
+
+	Slices are more flexible and powerful: variable-length or get a sub-array of its own
+
+	Slices are also index-based and have a size, but is resized when needed
+	*/
+
+	// creating a slice
+	var bookings []string
+
+	// Alternative ways (to create a slice with values, use the go syntactic user for slice)
+	// bookings2 := []string{"Nana", "Bob", "Segun"}
+	// var bookings2 = []string{"Nana", "Bob", "Segun"}
+
+
 
 	// adding elements to the array
 	// bookings[0] = "Nana"
@@ -53,14 +71,27 @@ func main() {
 	remainingTickets -= userTickets
 
 	// add user data to the array
-	bookings[0] = firstName + " " + lastName
+	// bookings[0] = firstName + " " + lastName
 
-	fmt.Printf("The whole array: %v\n", bookings)
-	fmt.Printf("The first value: %v\n", bookings[0])
-	fmt.Printf("Array type: %T\n", bookings[0])
-	fmt.Printf("Array length: %v\n", len(bookings))
+	// add data to SLICE (using the append function)
+	bookings = append(bookings, firstName + " " + lastName)
+
+	//ARRAYS
+	// fmt.Printf("The whole array: %v\n", bookings)
+	// fmt.Printf("The first value: %v\n", bookings[0])
+	// fmt.Printf("Array type: %T\n", bookings[0])
+	// fmt.Printf("Array length: %v\n", len(bookings))
+
+	//SLICE
+	// fmt.Printf("The whole slice: %v\n", bookings)
+	// fmt.Printf("The first value: %v\n", bookings[0])
+	// fmt.Printf("Slice type: %T\n", bookings)
+	// fmt.Printf("Slice length: %v\n", len(bookings))
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 
-	fmt.Printf("There are %v tickets remaining for %v", remainingTickets, conferenceName)
+	fmt.Printf("There are %v tickets remaining for %v\n", remainingTickets, conferenceName)
+
+	fmt.Printf("These are all our bookings %v\n", bookings)
+
 }
