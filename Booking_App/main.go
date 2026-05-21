@@ -17,6 +17,15 @@ func main() {
 	fmt.Println("Get your tickets here to attend")
 	fmt.Printf("\n")
 
+	// DATA STRUCTURES (ARRAYS AND SLICES IN GO)
+	// var bookings = [50]string{"Nana", "Nicole", "Peter"}  // we defined the length/size of the array to be 50 (can have only 50 elements), we also specify the allowed data types to be strings
+
+	// We can also declare an empty array with its type without assigning values yet
+	var bookings [50]string
+
+	// adding elements to the array
+	// bookings[0] = "Nana"
+	// bookings[1] = "Nicole"
 
 	var firstName string
 	var lastName string
@@ -35,9 +44,23 @@ func main() {
 	fmt.Println("Please Enter the number of tickets you wish to purchase: ")
 	fmt.Scan(&userTickets)
 
+	// Add this validation check before doing the subtraction!
+	if userTickets > remainingTickets {
+		fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets.\n", remainingTickets, userTickets)
+		return // Stops the program so it doesn't execute the rest of the code
+	}
+
 	remainingTickets -= userTickets
+
+	// add user data to the array
+	bookings[0] = firstName + " " + lastName
+
+	fmt.Printf("The whole array: %v\n", bookings)
+	fmt.Printf("The first value: %v\n", bookings[0])
+	fmt.Printf("Array type: %T\n", bookings[0])
+	fmt.Printf("Array length: %v\n", len(bookings))
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 
-	fmt.Printf("%v tickets remaining for %v", remainingTickets, conferenceName)
+	fmt.Printf("There are %v tickets remaining for %v", remainingTickets, conferenceName)
 }
