@@ -1,7 +1,10 @@
 // always need to start wiht a package statement
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 // an entry point for the go program
 func main() {
@@ -34,6 +37,7 @@ func main() {
 
 	// creating a slice
 	var bookings []string
+	var bookingsCount uint
 
 	// Alternative ways (to create a slice with values, use the go syntactic user for slice)
 	// bookings2 := []string{"Nana", "Bob", "Segun"}
@@ -45,53 +49,78 @@ func main() {
 	// bookings[0] = "Nana"
 	// bookings[1] = "Nicole"
 
-	var firstName string
-	var lastName string
-	var email string
-	var userTickets uint
-	// ask user for their name
-	fmt.Println("Please Enter your first name: ")
-	fmt.Scan(&firstName) // scans user input and assigns to variable (uses the pointer operator & to store the address of the variable as received from the user)
-	
-	fmt.Println("Please Enter your last name: ")
-	fmt.Scan(&lastName)
+	// LOOPS IN GO:
+	for {
+		var firstName string
+		var lastName string
+		var email string
+		var userTickets uint
+		// ask user for their name
+		fmt.Println("Please Enter your first name: ")
+		fmt.Scan(&firstName) // scans user input and assigns to variable (uses the pointer operator & to store the address of the variable as received from the user)
+		
+		fmt.Println("Please Enter your last name: ")
+		fmt.Scan(&lastName)
 
-	fmt.Println("Please Enter your email address: ")
-	fmt.Scan(&email)
+		fmt.Println("Please Enter your email address: ")
+		fmt.Scan(&email)
 
-	fmt.Println("Please Enter the number of tickets you wish to purchase: ")
-	fmt.Scan(&userTickets)
+		fmt.Println("Please Enter the number of tickets you wish to purchase: ")
+		fmt.Scan(&userTickets)
 
-	// Add this validation check before doing the subtraction!
-	if userTickets > remainingTickets {
-		fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets.\n", remainingTickets, userTickets)
-		return // Stops the program so it doesn't execute the rest of the code
+		// Add this validation check before doing the subtraction!
+
+		if userTickets > 0 && userTickets <= remainingTickets {
+			remainingTickets -= userTickets
+			bookingsCount++
+
+			// add user data to the array
+			// bookings[0] = firstName + " " + lastName
+
+			// add data to SLICE (using the append function)
+			bookings = append(bookings, firstName + " " + lastName)
+
+			//ARRAYS
+			// fmt.Printf("The whole array: %v\n", bookings)
+			// fmt.Printf("The first value: %v\n", bookings[0])
+			// fmt.Printf("Array type: %T\n", bookings[0])
+			// fmt.Printf("Array length: %v\n", len(bookings))
+
+			//SLICE
+			// fmt.Printf("The whole slice: %v\n", bookings)
+			// fmt.Printf("The first value: %v\n", bookings[0])
+			// fmt.Printf("Slice type: %T\n", bookings)
+			// fmt.Printf("Slice length: %v\n", len(bookings))
+
+			fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
+
+			fmt.Printf("There are %v tickets remaining for %v\n", remainingTickets, conferenceName)
+
+			firstNames := []string{}
+
+			for _, booking := range bookings {
+				var names = strings.Fields(booking)
+				firstNames = append(firstNames, names[0])
+			}
+			fmt.Printf("The first names of bookings are: %v\n", firstNames)
+
+			if remainingTickets == 0 {
+				// END THE PROGRAM
+				fmt.Printf("Go Conference is sold out! No more bookings available\n\n")
+				fmt.Printf("Total Bookings: %v, names of invidividuals: %v\n", bookingsCount, firstNames)
+				break
+			}
+		} else {
+			fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets.\n", remainingTickets, userTickets)
+			
+			if (len(bookings) > 0) {
+
+				bookings = bookings[:len(bookings)-1] // remove that last element
+			}
+			break
+			// return // Stops the program so it doesn't execute the rest of the code
+		}
+
 	}
-
-	remainingTickets -= userTickets
-
-	// add user data to the array
-	// bookings[0] = firstName + " " + lastName
-
-	// add data to SLICE (using the append function)
-	bookings = append(bookings, firstName + " " + lastName)
-
-	//ARRAYS
-	// fmt.Printf("The whole array: %v\n", bookings)
-	// fmt.Printf("The first value: %v\n", bookings[0])
-	// fmt.Printf("Array type: %T\n", bookings[0])
-	// fmt.Printf("Array length: %v\n", len(bookings))
-
-	//SLICE
-	// fmt.Printf("The whole slice: %v\n", bookings)
-	// fmt.Printf("The first value: %v\n", bookings[0])
-	// fmt.Printf("Slice type: %T\n", bookings)
-	// fmt.Printf("Slice length: %v\n", len(bookings))
-
-	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
-
-	fmt.Printf("There are %v tickets remaining for %v\n", remainingTickets, conferenceName)
-
-	fmt.Printf("These are all our bookings %v\n", bookings)
 
 }
