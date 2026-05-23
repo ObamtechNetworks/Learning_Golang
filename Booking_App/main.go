@@ -12,108 +12,34 @@ func main() {
 	const conferenceTickets int = 50  // constants in go
 	var remainingTickets uint = 50
 
-	fmt.Printf("conferenceTicket is %T, remainingTickets is %T, conferenceName is %T\n", conferenceTickets, remainingTickets, conferenceName)
-
-	// using printf
-	fmt.Printf("Welcome to the %v booking application\n", conferenceName)
-	fmt.Printf("We have total of %v tickets and %v are still availalbe\n", conferenceTickets, remainingTickets)
-	fmt.Println("Get your tickets here to attend")
-	fmt.Printf("\n")
-
-	// DATA STRUCTURES (ARRAYS AND SLICES IN GO)
-	// var bookings = [50]string{"Nana", "Nicole", "Peter"}  // we defined the length/size of the array to be 50 (can have only 50 elements), we also specify the allowed data types to be strings
-
-	// We can also declare an empty array with its type without assigning values yet
-	// var bookings [50]string
-
-	// SLICES IN GO
-	/**
-	Slice is an abstraction of an Array
-
-	Slices are more flexible and powerful: variable-length or get a sub-array of its own
-
-	Slices are also index-based and have a size, but is resized when needed
-	*/
+	// calling a function (all below have been replace by the function)
+	greetUser(conferenceName, conferenceTickets, remainingTickets)
 
 	// creating a slice
 	var bookings []string
 	var bookingsCount uint
 
-	// Alternative ways (to create a slice with values, use the go syntactic user for slice)
-	// bookings2 := []string{"Nana", "Bob", "Segun"}
-	// var bookings2 = []string{"Nana", "Bob", "Segun"}
-
-
-
-	// adding elements to the array
-	// bookings[0] = "Nana"
-	// bookings[1] = "Nicole"
-
 	// LOOPS IN GO:
 	for {
-		var firstName string
-		var lastName string
-		var email string
-		var userTickets int
-		// ask user for their name
-		fmt.Println("Please Enter your first name: ")
-		fmt.Scan(&firstName) // scans user input and assigns to variable (uses the pointer operator & to store the address of the variable as received from the user)
-		
-		fmt.Println("Please Enter your last name: ")
-		fmt.Scan(&lastName)
+		// REPLACED WITH FUNCTIONS to get user inputs:
+		firstName, lastName, email, userTickets := getUserInput()
 
-		fmt.Println("Please Enter your email address: ")
-		fmt.Scan(&email)
-
-		fmt.Println("Please Enter the number of tickets you wish to purchase: ")
-		fmt.Scan(&userTickets)
-
-		// validate user input length of first and last name should be at least 2 characters, email should contain @, and userTickets should be greater than 0 and less than or equal to remainingTickets
-
-		var isValidName = len(firstName) >= 2 && len(lastName) >= 2
-		var isValidEmail = strings.Contains(email, "@")
-		var isValidTicketNumber =  userTickets > 0 && uint(userTickets) <= remainingTickets
-		// Logical operators in Go
-		// var isValidCity = city == "Singapore" || city == "London"
+		// REPLACED USER VALIDATIONS WITH FUNCTOINS
+		isValidName, isValidEmail, isValidTicketNumber := validateUserInputs(firstName, lastName, email, userTickets, remainingTickets)
 
 		// Add validation check before doing the subtraction, all have to be true before executing the booking
 		if isValidName && isValidEmail && isValidTicketNumber {
-			remainingTickets -= uint(userTickets)
-			bookingsCount++
+			bookTicket(remainingTickets, userTickets, bookings, int(bookingsCount), firstName, lastName, email, conferenceName)
 
-			// add user data to the array
-			// bookings[0] = firstName + " " + lastName
+			// replaced with functions to return firstNames
+			firstNames := getFirstNames(bookings)
 
-			// add data to SLICE (using the append function)
-			bookings = append(bookings, firstName + " " + lastName)
-
-			//ARRAYS
-			// fmt.Printf("The whole array: %v\n", bookings)
-			// fmt.Printf("The first value: %v\n", bookings[0])
-			// fmt.Printf("Array type: %T\n", bookings[0])
-			// fmt.Printf("Array length: %v\n", len(bookings))
-
-			//SLICE
-			// fmt.Printf("The whole slice: %v\n", bookings)
-			// fmt.Printf("The first value: %v\n", bookings[0])
-			// fmt.Printf("Slice type: %T\n", bookings)
-			// fmt.Printf("Slice length: %v\n", len(bookings))
-
-			fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
-
-			fmt.Printf("There are %v tickets remaining for %v\n", remainingTickets, conferenceName)
-
-			firstNames := []string{}
-
-			for _, booking := range bookings {
-				var names = strings.Fields(booking)
-				firstNames = append(firstNames, names[0])
-			}
+			// print firstNames
 			fmt.Printf("The first names of bookings are: %v\n\n", firstNames)
 
 			if remainingTickets == 0 {
 				// END THE PROGRAM
-				fmt.Printf("Go Conference is sold out! No more bookings available\n\n")
+				fmt.Printf("Go Conference is sold out! No more bookings available, come back next year!\n\n")
 				fmt.Printf("Total Bookings: %v, names of invidividuals: %v\n", bookingsCount, firstNames)
 				break
 			}
@@ -127,10 +53,8 @@ func main() {
 			}
 
 			if !isValidTicketNumber {
-				fmt.Printf("The Number of tickets is invalid\n\n")
+				fmt.Printf("The Number of tickets is invalid. We only have %v tickets remaining\n\n", remainingTickets)
 			}
-			// fmt.Printf("Your input data is Invalid, Please try again. We have %v tickets remaining\n\n", remainingTickets)
-			// continue // skip the rest of the code and start the next iteration of the loop
 		}
 
 		// HOW SWTICH STATEMENTS WORK IN Go
@@ -146,11 +70,73 @@ func main() {
 		// 	// execute code for Berlin
 		// case "Mexico City":
 		// 	// execute code for Mexico
-		
+
 		// // we can also have cases for one or more cities to execute same conditions for
 		// case "Hong Kong", "Turkey":
 		// 	// Execute code for Hong Kong and Turkey
 		// }
 	}
 
+}
+
+// Functions in Go (also dealing with arugments in function)
+func greetUser(confName string, confTickets int, remTickets uint) {
+	fmt.Printf("Welcome to the %v booking application\n", confName)
+	fmt.Printf("We have total of %v tickets and %v are still availalbe\n", confTickets, remTickets)
+	fmt.Println("Get your tickets here to attend")
+	fmt.Println("")
+}
+
+func getFirstNames(bookings []string) []string {
+	firstNames := []string{}
+
+	for _, booking := range bookings {
+		var names = strings.Fields(booking)
+		firstNames = append(firstNames, names[0])
+	}
+
+	return firstNames
+}
+
+func validateUserInputs(firstName string, lastName string, email string, userTickets int, remainingTickets uint) (bool, bool, bool) {
+	isValidName := len(firstName) >= 2 && len(lastName) >= 2
+	isValidEmail := strings.Contains(email, "@")
+	isValidTicketNumber := userTickets > 0 && uint(userTickets) <= remainingTickets
+
+	// Go allows us to return multiple values in a function
+	return isValidName, isValidEmail, isValidTicketNumber
+}
+
+func getUserInput() (string, string, string, int) {
+	var firstName string
+	var lastName string
+	var email string
+	var userTickets int
+	// ask user for their name
+	fmt.Println("Please Enter your first name: ")
+	fmt.Scan(&firstName) // scans user input and assigns to variable (uses the pointer operator & to store the address of the variable as received from the user)
+
+	fmt.Println("Please Enter your last name: ")
+	fmt.Scan(&lastName)
+
+	fmt.Println("Please Enter your email address: ")
+	fmt.Scan(&email)
+
+	fmt.Println("Please Enter the number of tickets you wish to purchase: ")
+	fmt.Scan(&userTickets)
+
+	return firstName, lastName, email, userTickets
+
+}
+
+func bookTicket(remainingTickets uint, userTickets int, bookings []string, bookingsCount int, firstName string, lastName string, email string, conferenceName string) {
+	remainingTickets -= uint(userTickets)
+	bookingsCount++
+
+	// add data to SLICE (using the append function)
+	bookings = append(bookings, firstName+" "+lastName)
+
+	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
+
+	fmt.Printf("There are %v tickets remaining for %v\n", remainingTickets, conferenceName)
 }
