@@ -54,7 +54,7 @@ func main() {
 		var firstName string
 		var lastName string
 		var email string
-		var userTickets uint
+		var userTickets int
 		// ask user for their name
 		fmt.Println("Please Enter your first name: ")
 		fmt.Scan(&firstName) // scans user input and assigns to variable (uses the pointer operator & to store the address of the variable as received from the user)
@@ -70,8 +70,8 @@ func main() {
 
 		// Add this validation check before doing the subtraction!
 
-		if userTickets > 0 && userTickets <= remainingTickets {
-			remainingTickets -= userTickets
+		if userTickets > 0 && uint(userTickets) <= remainingTickets {
+			remainingTickets -= uint(userTickets)
 			bookingsCount++
 
 			// add user data to the array
@@ -111,14 +111,9 @@ func main() {
 				break
 			}
 		} else {
-			fmt.Printf("We only have %v tickets remaining, so you can't book %v tickets.\n", remainingTickets, userTickets)
-			
-			if (len(bookings) > 0) {
 
-				bookings = bookings[:len(bookings)-1] // remove that last element
-			}
-			break
-			// return // Stops the program so it doesn't execute the rest of the code
+			fmt.Printf("Invalid input, Please try again. We only have %v tickets remaining, so you can't book %v tickets.\n\n", remainingTickets, userTickets)
+			continue // skip the rest of the code and start the next iteration of the loop
 		}
 
 	}
