@@ -4,6 +4,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"booking_app/helper"
 )
 
 // PACKAGE-LEVEL VARIABLES
@@ -23,7 +24,7 @@ func main() {
 	for {
 		firstName, lastName, email, userTickets := getUserInput()
 
-		isValidName, isValidEmail, isValidTicketNumber := validateUserInputs(firstName, lastName, email, userTickets)
+		isValidName, isValidEmail, isValidTicketNumber := helper.ValidateUserInputs(firstName, lastName, email, userTickets, remainingTickets)
 
 		if isValidName && isValidEmail && isValidTicketNumber {
 			// We don't need to pass remainingTickets or bookings anymore, they can be accessed from the package level
@@ -70,14 +71,6 @@ func getFirstNames() []string {
 	}
 
 	return firstNames
-}
-
-func validateUserInputs(firstName string, lastName string, email string, userTickets int) (bool, bool, bool) {
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(email, "@")
-	isValidTicketNumber := userTickets > 0 && uint(userTickets) <= remainingTickets
-
-	return isValidName, isValidEmail, isValidTicketNumber
 }
 
 func getUserInput() (string, string, string, int) {
