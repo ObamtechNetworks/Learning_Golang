@@ -68,9 +68,16 @@ func main() {
 		fmt.Println("Please Enter the number of tickets you wish to purchase: ")
 		fmt.Scan(&userTickets)
 
-		// Add this validation check before doing the subtraction!
+		// validate user input length of first and last name should be at least 2 characters, email should contain @, and userTickets should be greater than 0 and less than or equal to remainingTickets
 
-		if userTickets > 0 && uint(userTickets) <= remainingTickets {
+		var isValidName = len(firstName) >= 2 && len(lastName) >= 2
+		var isValidEmail = strings.Contains(email, "@")
+		var isValidTicketNumber =  userTickets > 0 && uint(userTickets) <= remainingTickets
+		// Logical operators in Go
+		// var isValidCity = city == "Singapore" || city == "London"
+
+		// Add validation check before doing the subtraction, all have to be true before executing the booking
+		if isValidName && isValidEmail && isValidTicketNumber {
 			remainingTickets -= uint(userTickets)
 			bookingsCount++
 
@@ -102,7 +109,7 @@ func main() {
 				var names = strings.Fields(booking)
 				firstNames = append(firstNames, names[0])
 			}
-			fmt.Printf("The first names of bookings are: %v\n", firstNames)
+			fmt.Printf("The first names of bookings are: %v\n\n", firstNames)
 
 			if remainingTickets == 0 {
 				// END THE PROGRAM
@@ -111,9 +118,19 @@ func main() {
 				break
 			}
 		} else {
+			if !isValidName {
+				fmt.Printf("\nFirst name or Last Name is too short\n")
+			}
 
-			fmt.Printf("Invalid input, Please try again. We only have %v tickets remaining, so you can't book %v tickets.\n\n", remainingTickets, userTickets)
-			continue // skip the rest of the code and start the next iteration of the loop
+			if !isValidEmail {
+				fmt.Printf("The Email address you entered is invalid '@' sign missing\n")
+			}
+
+			if !isValidTicketNumber {
+				fmt.Printf("The Number of tickets is invalid\n\n")
+			}
+			// fmt.Printf("Your input data is Invalid, Please try again. We have %v tickets remaining\n\n", remainingTickets)
+			// continue // skip the rest of the code and start the next iteration of the loop
 		}
 
 	}
