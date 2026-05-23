@@ -133,6 +133,24 @@ func main() {
 			// continue // skip the rest of the code and start the next iteration of the loop
 		}
 
+		// HOW SWTICH STATEMENTS WORK IN Go
+		//say we have a variable called city and we have cases for what should be executed for different kinds of city
+		// city := "London"
+
+		// switch city {
+		// case "New york":
+		// 	// execute code for booking New York conference tickets
+		// case "Singpore":
+		// 	//execute code for booking Singapore
+		// case "Berlin":
+		// 	// execute code for Berlin
+		// case "Mexico City":
+		// 	// execute code for Mexico
+		
+		// // we can also have cases for one or more cities to execute same conditions for
+		// case "Hong Kong", "Turkey":
+		// 	// Execute code for Hong Kong and Turkey
+		// }
 	}
 
 }
