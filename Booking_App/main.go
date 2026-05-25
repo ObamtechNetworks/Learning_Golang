@@ -2,18 +2,20 @@
 package main
 
 import (
-	"fmt"
-	"strings"
 	"booking_app/helper"
+	"fmt"
+	"strconv"
 )
 
 // PACKAGE-LEVEL VARIABLES
 // These are defined outside main, so ALL functions below can share and modify them directly!
 // NOTE: WE CANNOT CREATE PACKAGE LEVEL VARIABLES USING THE := syntax, we must explicitly use the var keyword
 var conferenceName = "Go Conference"
+
 const conferenceTickets int = 50
+
 var remainingTickets uint = 50
-var bookings []string
+var bookings = make([]map[string]string, 0) // adjust for type to become a map type and create an empty list of maps and must be initialized with a size while it dynamically expands
 var bookingsCount uint
 
 func main() {
@@ -65,9 +67,9 @@ func greetUser() {
 func getFirstNames() []string {
 	firstNames := []string{}
 
+	// now it's easier to iterate over a map (since bookings has been converted to a map)
 	for _, booking := range bookings {
-		var names = strings.Fields(booking)
-		firstNames = append(firstNames, names[0])
+		firstNames = append(firstNames, booking["firstName"])
 	}
 
 	return firstNames
@@ -99,7 +101,18 @@ func bookTicket(userTickets int, firstName string, lastName string, email string
 	remainingTickets -= uint(userTickets)
 	bookingsCount++
 
-	bookings = append(bookings, firstName+" "+lastName)
+	// create a map for a user
+	var userData = make(map[string]string) // create an empty map
+	// save key value pairs in map
+	userData["firstName"] = firstName
+	userData["lastName"] = lastName
+	userData["email"] = email
+	// we can't mix data types in maps, so we need a tweak to handle this, by converting the userTickets to a number character, this is possible using a function FormatInt
+	userData["numberOfTickets"] = strconv.FormatInt(int64(userTickets), 10)
+
+	// replace bookings (since it has been converted to a map) now with the userData Map
+	bookings = append(bookings, userData)
+	fmt.Printf("List of bookings is %v\n", bookings) // prints the lists of maps, basically an array of maps (objects)
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 	fmt.Printf("There are %v tickets remaining for %v\n", remainingTickets, conferenceName)
