@@ -4,6 +4,7 @@ package main
 import (
 	"booking_app/helper"
 	"fmt"
+	"sync"
 	"time"
 )
 
@@ -28,6 +29,8 @@ type UserData struct {
 }
 
 
+// create a wait group to wait for all goroutines to finish before exiting the program, the sync package provides a basic synchronization functionality through the WaitGroup type, which allows us to wait for a collection of goroutines to finish executing before proceeding with the rest of the program. We will use this to ensure that all ticket sending operations are completed before the program exits.
+var wg = sync.WaitGroup{}
 
 func main() {
 
@@ -42,6 +45,9 @@ func main() {
 		if isValidName && isValidEmail && isValidTicketNumber {
 			// We don't need to pass remainingTickets or bookings anymore, they can be accessed from the package level
 			bookTicket(userTickets, firstName, lastName, email)
+			
+			// Add a new goroutine to send the ticket, and increment the wait group counter by 1 for each goroutine we start
+			wg.Add(1)
 			go sendTicket(userTickets, firstName, lastName, email) // make the sendTicket function run concurrently as a goroutine, so it doesn't block the main thread while simulating the delay in sending tickets
 
 			firstNames := getFirstNames()
@@ -66,6 +72,8 @@ func main() {
 			}
 		}
 	}
+	// Wait for all goroutines to finish before exiting the program
+	wg.Wait()
 }
 
 // Notice we stripped out parameters that are now global variables!
@@ -131,9 +139,11 @@ func bookTicket(userTickets int, firstName string, lastName string, email string
 // learning go routines in Go
 func sendTicket(userTickets int, firstName string, lastName string, email string) {
 	// Simulate a delay
-	time.Sleep(50 * time.Second)
+	time.Sleep(20 * time.Second)
 	var ticket = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
 	fmt.Println("####################")
 	fmt.Printf("Sending ticket:\n %v \nto email address %v\n", ticket, email)
 	fmt.Println("####################")
+	// Decrement the wait group counter when the goroutine finishes
+	wg.Done()
 }
