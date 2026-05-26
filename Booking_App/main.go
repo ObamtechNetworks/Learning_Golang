@@ -4,6 +4,7 @@ package main
 import (
 	"booking_app/helper"
 	"fmt"
+	"time"
 )
 
 // PACKAGE-LEVEL VARIABLES
@@ -26,6 +27,8 @@ type UserData struct {
 	numberOfTickets int
 }
 
+
+
 func main() {
 
 	// the greet user function
@@ -39,6 +42,7 @@ func main() {
 		if isValidName && isValidEmail && isValidTicketNumber {
 			// We don't need to pass remainingTickets or bookings anymore, they can be accessed from the package level
 			bookTicket(userTickets, firstName, lastName, email)
+			go sendTicket(userTickets, firstName, lastName, email) // make the sendTicket function run concurrently as a goroutine, so it doesn't block the main thread while simulating the delay in sending tickets
 
 			firstNames := getFirstNames()
 
@@ -122,4 +126,14 @@ func bookTicket(userTickets int, firstName string, lastName string, email string
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
 	fmt.Printf("There are %v tickets remaining for %v\n", remainingTickets, conferenceName)
+}
+
+// learning go routines in Go
+func sendTicket(userTickets int, firstName string, lastName string, email string) {
+	// Simulate a delay
+	time.Sleep(50 * time.Second)
+	var ticket = fmt.Sprintf("%v tickets for %v %v", userTickets, firstName, lastName)
+	fmt.Println("####################")
+	fmt.Printf("Sending ticket:\n %v \nto email address %v\n", ticket, email)
+	fmt.Println("####################")
 }
