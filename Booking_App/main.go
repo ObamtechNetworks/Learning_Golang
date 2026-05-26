@@ -4,7 +4,6 @@ package main
 import (
 	"booking_app/helper"
 	"fmt"
-	"strconv"
 )
 
 // PACKAGE-LEVEL VARIABLES
@@ -15,8 +14,17 @@ var conferenceName = "Go Conference"
 const conferenceTickets int = 50
 
 var remainingTickets uint = 50
-var bookings = make([]map[string]string, 0) // adjust for type to become a map type and create an empty list of maps and must be initialized with a size while it dynamically expands
+var bookings = make([]UserData, 0) // converted to a struct type
 var bookingsCount uint
+
+// STRUCT DATA TYPE IN GO
+// in Go, struct is like creating a custom type that can hold multiple fields of different data types, it's like a blueprint for creating objects that can represent complex data structures. We can define a struct to represent a user booking, for example, with fields for first name, last name, email, number of tickets, and whether they opted in for the newsletter. This allows us to organize and manage our data more effectively.
+type UserData struct {
+	firstName string
+	lastName string
+	email string
+	numberOfTickets int
+}
 
 func main() {
 
@@ -67,9 +75,9 @@ func greetUser() {
 func getFirstNames() []string {
 	firstNames := []string{}
 
-	// now it's easier to iterate over a map (since bookings has been converted to a map)
+	// now that we are using map, accessing first names will be way more easier
 	for _, booking := range bookings {
-		firstNames = append(firstNames, booking["firstName"])
+		firstNames = append(firstNames, booking.firstName)
 	}
 
 	return firstNames
@@ -101,16 +109,14 @@ func bookTicket(userTickets int, firstName string, lastName string, email string
 	remainingTickets -= uint(userTickets)
 	bookingsCount++
 
-	// create a map for a user
-	var userData = make(map[string]string) // create an empty map
-	// save key value pairs in map
-	userData["firstName"] = firstName
-	userData["lastName"] = lastName
-	userData["email"] = email
-	// we can't mix data types in maps, so we need a tweak to handle this, by converting the userTickets to a number character, this is possible using a function FormatInt
-	userData["numberOfTickets"] = strconv.FormatInt(int64(userTickets), 10)
+	// Now dealing with structs => Create a struct type for the user data and assign values to the function arguments
+	var userData = UserData {
+		firstName: firstName,
+		lastName: lastName,
+		email: email,
+		numberOfTickets: userTickets,
+	}
 
-	// replace bookings (since it has been converted to a map) now with the userData Map
 	bookings = append(bookings, userData)
 	fmt.Printf("List of bookings is %v\n", bookings) // prints the lists of maps, basically an array of maps (objects)
 
